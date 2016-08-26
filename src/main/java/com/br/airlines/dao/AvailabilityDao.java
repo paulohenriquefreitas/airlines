@@ -2,22 +2,15 @@ package com.br.airlines.dao;
 
 
 
+import javax.xml.bind.JAXBException;
+
 import retrofit.http.GET;
 import retrofit.http.Path;
 
 import com.br.airlines.model.Availability;
 
-public interface AvailabilityDao {
-	
-	
-	@GET ("/flights/{origin}/{destination}/{start}/{end}/{pax}")
-	Availability getAvailability(@Path(value = "origin") String origin, 
-			                     @Path(value = "destination") String destination,
-			                     @Path(value = "start") String start,
-			                     @Path(value = "end") String end,
-			                     @Path(value = "pax") String pax);
-	
-	
-			                     
+public interface AvailabilityDao {	
+
+	Availability get(String origin,String destination,String start,String end,String pax,String url) throws JAXBException;
 
 }

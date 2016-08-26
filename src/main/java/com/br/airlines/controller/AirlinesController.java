@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.airlines.model.Airlines;
-import com.br.airlines.model.AvailabilityResult;
 import com.br.airlines.service.AirlinesService;
 
 @RestController

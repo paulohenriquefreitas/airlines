@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
@@ -48,16 +49,11 @@ public class AirlinesService {
 	@Autowired
 	private AvailabilityDao availabilityDao;
 	
-	@Autowired
-	private AvailabilityDaoImpl availabilityDaoImpl;
-	
 	
 	
 	public Airlines getFlight(String origin, String destination,String start, String end, String pax) throws JAXBException{
 		
-		//Availability availability = availabilityDao.getAvailability(origin, destination, start, end, pax);		
-		
-		Availability availability = availabilityDaoImpl.get(origin, destination, start, end, pax, url);
+		Availability availability = availabilityDao.get(origin, destination, start, end, pax, url);
 		
 		return Airlines.builder().availabilityResult(parseXml(availability)).build();
 	}
@@ -153,8 +149,10 @@ public class AirlinesService {
 	}
 	
 	private LocalTime getTime(XMLGregorianCalendar departureDate) {
+		DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter();
 		Date utilDate = departureDate.toGregorianCalendar().getTime();
 		LocalTime localDate = LocalDateTime.ofInstant( utilDate.toInstant(), ZoneId.of("America/Sao_Paulo")).toLocalTime();
+		
 		return localDate;
 	}	
 }

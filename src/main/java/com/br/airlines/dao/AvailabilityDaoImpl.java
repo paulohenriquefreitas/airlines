@@ -18,7 +18,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.br.airlines.model.Availability;
 
-public class AvailabilityDaoImpl {
+public class AvailabilityDaoImpl implements  AvailabilityDao{
 	
 	private static final Log LOG = LogFactory.getLog(AvailabilityDaoImpl.class);	
 	
