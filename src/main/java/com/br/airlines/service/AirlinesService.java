@@ -1,13 +1,11 @@
 package com.br.airlines.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,18 +13,16 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.br.airlines.dao.AvailabilityDao;
-import com.br.airlines.dao.AvailabilityDaoImpl;
 import com.br.airlines.model.Airlines;
 import com.br.airlines.model.ArrivesOn;
 import com.br.airlines.model.Availability;
-import com.br.airlines.model.Availability.Flight.Fares.Fare;
-import com.br.airlines.model.AvailabilityResult;import com.br.airlines.model.BookingFee;
+import com.br.airlines.model.AvailabilityResult;
+import com.br.airlines.model.BookingFee;
 import com.br.airlines.model.Business;
 import com.br.airlines.model.DepartsOn;
 import com.br.airlines.model.Economy;
@@ -51,6 +47,8 @@ public class AirlinesService {
 	
 	
 	
+	
+	
 	public Airlines getFlight(String origin, String destination,String start, String end, String pax) throws JAXBException{
 		
 		Availability availability = availabilityDao.get(origin, destination, start, end, pax, url);
@@ -58,7 +56,7 @@ public class AirlinesService {
 		return Airlines.builder().availabilityResult(parseXml(availability)).build();
 	}
 
-	private AvailabilityResult parseXml(Availability availability) {
+	public AvailabilityResult parseXml(Availability availability) {
 		AvailabilityResult availabilityResult = new AvailabilityResult();
 		availabilityResult.setFlight(getFlightList(availability));
 		
