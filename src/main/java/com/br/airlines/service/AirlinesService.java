@@ -1,5 +1,7 @@
 package com.br.airlines.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -9,6 +11,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -56,29 +59,29 @@ public class AirlinesService {
 		return Airlines.builder().availabilityResult(parseXml(availability)).build();
 	}
 
-	public AvailabilityResult parseXml(Availability availability) {
-		AvailabilityResult availabilityResult = new AvailabilityResult();
-		availabilityResult.setFlight(getFlightList(availability));
+	public List<AvailabilityResult> parseXml(Availability availability) {
+		List<AvailabilityResult> arList = new ArrayList<>();
+		availability.getFlight().forEach(f -> {
+			AvailabilityResult availabilityResult = new AvailabilityResult();
+			availabilityResult.setFlight(getFlightList(f));			
+			arList.add(availabilityResult);
+		});
 		
-		return availabilityResult;
+		return arList;
 	}
 
-	private List<Flight> getFlightList(Availability availability) {
-		List<Flight> flights = new ArrayList<>();
-		availability.getFlight().forEach(f -> {
-			flights.add(Flight.builder().operator(f.getCarrierCode())
+	private Flight getFlightList(com.br.airlines.model.Availability.Flight f) {
+			return Flight.builder().operator(f.getCarrierCode())
 					.flightNumber(f.getFlightDesignator())
 					.departsFrom(f.getOriginAirport())
 					.arrivesAt(f.getDestinationAirport())
-					.departsOn(DepartsOn.builder().date(getDate(f.getDepartureDate())).time(getTime(f.getDepartureDate()).toString()).build())
-					.arrivesOn(ArrivesOn.builder().date(getDate(f.getArrivalDate()).toString()).time(getTime(f.getArrivalDate()).toString()).build())
+					.departsOn(DepartsOn.builder().date(getDate(f.getDepartureDate())).time(getTimeToString(f.getDepartureDate())).build())
+					.arrivesOn(ArrivesOn.builder().date(getDate(f.getArrivalDate()).toString()).time(getTimeToString(f.getArrivalDate())).build())
 					.flightTime(calculateTime(f.getDepartureDate(),f.getArrivalDate()))
 					.farePrices(FarePrices.builder().first(getFirst(f)).business(getBusiness(f)).economy(getEconomy(f)).build())					
-					.build());
+					.build();
 				
 				
-			});
-		return flights;
 	}	
 
 	private First getFirst(com.br.airlines.model.Availability.Flight flight) {
@@ -120,15 +123,15 @@ public class AirlinesService {
 	    return economy;
 	}
 	
-	private String getAmount(String price) {
+	public String getAmount(String price) {
 		return price.substring(4);
 	}
 
-	private String getCurrency(String price) {
+	public String getCurrency(String price) {
 		return price.toString().substring(0,3);
 	}	
 	
-	private String calculateTime(XMLGregorianCalendar departureDate,XMLGregorianCalendar arrivalDate) {
+	public String calculateTime(XMLGregorianCalendar departureDate,XMLGregorianCalendar arrivalDate) {
 			LocalTime departureTime = getTime(departureDate);
 			LocalTime arriveTime = getTime(arrivalDate);
 		
@@ -140,17 +143,24 @@ public class AirlinesService {
         return (between / 60) + ":" + minutes;
 	}
 
-	private String getDate(XMLGregorianCalendar departureDate) {
-		Date utilDate = departureDate.toGregorianCalendar().getTime();
+	public String getDate(XMLGregorianCalendar date) {
+		Date utilDate = date.toGregorianCalendar().getTime();
 		String localDate = LocalDateTime.ofInstant( utilDate.toInstant(), ZoneId.of("America/Sao_Paulo")).toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		return localDate;
 	}
 	
-	private LocalTime getTime(XMLGregorianCalendar departureDate) {
-		DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter();
+	public LocalTime getTime(XMLGregorianCalendar departureDate) {
 		Date utilDate = departureDate.toGregorianCalendar().getTime();
 		LocalTime localDate = LocalDateTime.ofInstant( utilDate.toInstant(), ZoneId.of("America/Sao_Paulo")).toLocalTime();
 		
 		return localDate;
+	}
+	
+	public String getTimeToString(XMLGregorianCalendar departureDate) {
+		Date utilDate = departureDate.toGregorianCalendar().getTime();
+		DateFormat readFormat = new SimpleDateFormat( "hh:mmaa");
+		readFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+		
+		return readFormat.format(utilDate);
 	}	
 }

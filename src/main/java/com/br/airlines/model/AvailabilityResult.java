@@ -21,5 +21,5 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AvailabilityResult
 {
 	@JsonProperty("flight")
-    private List<Flight> Flight;   
+    private Flight Flight;   
 }

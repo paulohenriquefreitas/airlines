@@ -38,11 +38,7 @@ public class AvailabilityDaoImpl implements  AvailabilityDao{
 		        {
 		            throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 		        }
-		        HttpEntity httpEntity = response.getEntity();
-		        String apiOutput = EntityUtils.toString(httpEntity);
-		        JAXBContext jaxbContext = JAXBContext.newInstance(Availability.class);
-		        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		        availability = (Availability) jaxbUnmarshaller.unmarshal(new StringReader(apiOutput)); 	
+		        availability = extractAvailability(response); 	
 		    } catch (HttpException e) {				
 				LOG.error("Ocorreu uma exceção " + e);
 			} catch (IOException e) {
@@ -51,6 +47,17 @@ public class AvailabilityDaoImpl implements  AvailabilityDao{
 		    {
 		        httpClient.getConnectionManager().shutdown();
 		    }		
+		return availability;
+	}
+
+	public Availability extractAvailability(HttpResponse response)
+			throws IOException, JAXBException {
+		Availability availability;
+		HttpEntity httpEntity = response.getEntity();
+		String apiOutput = EntityUtils.toString(httpEntity);
+		JAXBContext jaxbContext = JAXBContext.newInstance(Availability.class);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		availability = (Availability) jaxbUnmarshaller.unmarshal(new StringReader(apiOutput));
 		return availability;
 	}
 
