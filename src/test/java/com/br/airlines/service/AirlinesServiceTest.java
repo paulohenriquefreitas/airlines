@@ -41,14 +41,10 @@ public class AirlinesServiceTest {
 		arlinesService = new AirlinesService();
 	}
 	
-	/*@Test
-	public void test_airlines_parse() throws JAXBException{
-		
-		assertEquals(ar,arlinesService.getFlight(ORIGIN, DESTINATION, START, END, PAX));
-	}*/
+
 	
 	@Test
-	public void test_airlnes_parse(){
+	public void test_airlines_parse(){
 		Availability av = createAvailabilityResult();
 		assertEquals("EI",arlinesService.parseXml(av).get(0).getFlight().getOperator());
 		assertEquals("EI554",arlinesService.parseXml(av).get(0).getFlight().getFlightNumber());
@@ -58,7 +54,17 @@ public class AirlinesServiceTest {
 		assertEquals("08:48AM",arlinesService.parseXml(av).get(0).getFlight().getDepartsOn().getTime());
 		assertEquals("02-01-2014",arlinesService.parseXml(av).get(0).getFlight().getArrivesOn().getDate());
 		assertEquals("11:04AM",arlinesService.parseXml(av).get(0).getFlight().getArrivesOn().getTime());
-		assertEquals("2:16",arlinesService.parseXml(av).get(0).getFlight().getFlightTime());		
+		assertEquals("2:16",arlinesService.parseXml(av).get(0).getFlight().getFlightTime());
+		
+		assertEquals("EI",arlinesService.parseXml(av).get(1).getFlight().getOperator());
+		assertEquals("EI520",arlinesService.parseXml(av).get(1).getFlight().getFlightNumber());
+		assertEquals("BOS",arlinesService.parseXml(av).get(1).getFlight().getDepartsFrom());
+		assertEquals("DUB",arlinesService.parseXml(av).get(1).getFlight().getArrivesAt());
+		assertEquals("05-01-2014",arlinesService.parseXml(av).get(1).getFlight().getDepartsOn().getDate());
+		assertEquals("09:03AM",arlinesService.parseXml(av).get(1).getFlight().getDepartsOn().getTime());
+		assertEquals("05-01-2014",arlinesService.parseXml(av).get(1).getFlight().getArrivesOn().getDate());
+		assertEquals("12:13PM",arlinesService.parseXml(av).get(1).getFlight().getArrivesOn().getTime());
+		assertEquals("3:10",arlinesService.parseXml(av).get(1).getFlight().getFlightTime());
 	}
 	
 	@Test
@@ -142,17 +148,56 @@ public class AirlinesServiceTest {
 		business.setFees("EUR 17.00");
 		business.setTax("EUR 13.60");
 		fare.add(business);
-		fares.setFare(fare);
+		
 		
 		Availability.Flight.Fares.Fare economy = new Availability.Flight.Fares.Fare();
 		economy.setBasePrice("EUR 68.00");
 		economy.setClazz("YIF");
 		economy.setFees("EUR 17.00");
 		economy.setTax("EUR 13.60");
-		fare.add(economy);		
+		fare.add(economy);
+		
+		fares.setFare(fare);
 		
 		flight.setFares(fares);
+		
+		Availability.Flight.Fares fares02 = new Availability.Flight.Fares();
+		List<Availability.Flight.Fares.Fare> fare02 = new ArrayList<>();
+		
+		Availability.Flight flight02 = new Availability.Flight();
+		flight02.setCarrierCode("EI");
+		flight02.setArrivalDate(getDate("2014-01-05T14:13:00.000Z"));
+		flight02.setDepartureDate(getDate("2014-01-05T011:03:00.000Z"));
+		flight02.setDestinationAirport("DUB");
+		flight02.setOriginAirport("BOS");
+		flight02.setFlightDesignator("EI520");
+		
+		Availability.Flight.Fares.Fare first02 = new Availability.Flight.Fares.Fare();
+		first02.setBasePrice("EUR 272.00");
+		first02.setClazz("FIF");
+		first02.setFees("EUR 17.00");
+		first02.setTax("EUR 13.60");
+		fare02.add(first02);
+		Availability.Flight.Fares.Fare business02 = new Availability.Flight.Fares.Fare();
+		business02.setBasePrice("EUR 136.00");
+		business02.setClazz("CIF");
+		business02.setFees("EUR 17.00");
+		business02.setTax("EUR 13.60");
+		fare02.add(business02);
+		
+		
+		Availability.Flight.Fares.Fare economy02 = new Availability.Flight.Fares.Fare();
+		economy02.setBasePrice("EUR 68.00");
+		economy02.setClazz("YIF");
+		economy02.setFees("EUR 17.00");
+		economy02.setTax("EUR 13.60");
+		fare02.add(economy02);	
+		fares02.setFare(fare02);
+		
+		flight02.setFares(fares02);
+		
 		flights.add(flight);
+		flights.add(flight02);
 		Availability availability = new Availability();
 		availability.setFlight(flights);
 		return availability;
