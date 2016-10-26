@@ -16,10 +16,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Builder
 @ToString
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Tax {
+public class FareType {
 	
-	private String currency;
+	private Ticket ticket;
 	
-	private String amount;
 
 }

@@ -1,58 +1,25 @@
 package com.br.airlines.model;
 
-public class Fare
-{
-    private String Fees;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-    private String BasePrice;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-    private String clazz;
-
-    private String Tax;
-
-    public String getFees ()
-    {
-        return Fees;
-    }
-
-    public void setFees (String Fees)
-    {
-        this.Fees = Fees;
-    }
-
-    public String getBasePrice ()
-    {
-        return BasePrice;
-    }
-
-    public void setBasePrice (String BasePrice)
-    {
-        this.BasePrice = BasePrice;
-    }
-
-    public String getClazz ()
-    {
-        return clazz;
-    }
-
-    public void setClass (String clazz)
-    {
-        this.clazz = clazz;
-    }
-
-    public String getTax ()
-    {
-        return Tax;
-    }
-
-    public void setTax (String Tax)
-    {
-        this.Tax = Tax;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [Fees = "+Fees+", BasePrice = "+BasePrice+", class = "+clazz+", Tax = "+Tax+"]";
-    }
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class Fare {
+	
+	private Ticket ticket;
+	private Ticket bookingFee;
+	private Ticket tax;
+    	
 }

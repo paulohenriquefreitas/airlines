@@ -20,6 +20,6 @@ public class Ticket {
 	
 	private String currency;
 	
-	 private String amount;
+	private String amount;
 
 }

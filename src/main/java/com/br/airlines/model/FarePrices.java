@@ -16,12 +16,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Builder
 @ToString
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class FarePrices {
+public class FarePrices {	
 	
-	
-    private First first;
+    private Fare first;
     
-    private Business business;
+    private Fare business;
     
-    private Economy economy;
+    private Fare economy;
 }

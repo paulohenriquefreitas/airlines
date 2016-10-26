@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,14 +24,10 @@ import com.br.airlines.model.Airlines;
 import com.br.airlines.model.ArrivesOn;
 import com.br.airlines.model.Availability;
 import com.br.airlines.model.AvailabilityResult;
-import com.br.airlines.model.BookingFee;
-import com.br.airlines.model.Business;
 import com.br.airlines.model.DepartsOn;
-import com.br.airlines.model.Economy;
+import com.br.airlines.model.Fare;
 import com.br.airlines.model.FarePrices;
-import com.br.airlines.model.First;
 import com.br.airlines.model.Flight;
-import com.br.airlines.model.Tax;
 import com.br.airlines.model.Ticket;
 
 
@@ -84,39 +79,40 @@ public class AirlinesService {
 				
 	}	
 
-	private First getFirst(com.br.airlines.model.Availability.Flight flight) {
-		First first = new First();
+	private Fare getFirst(com.br.airlines.model.Availability.Flight flight) {
+		Fare first = new Fare();
 		flight.getFares().getFare().forEach(f -> {
 			if(f.getClazz().equals(FIRSTCLASS)){
 				first.setTicket(Ticket.builder().currency(getCurrency(f.getBasePrice())).amount(getAmount(f.getBasePrice())).build());
-				first.setTax(Tax.builder().currency(getCurrency(f.getTax())).amount(getAmount(f.getTax())).build());
-				first.setBookingFee(BookingFee.builder().currency(getCurrency(f.getFees())).amount(getAmount(f.getFees())).build());
+				first.setBookingFee(Ticket.builder().currency(getCurrency(f.getFees())).amount(getAmount(f.getFees())).build());
+				first.setTax(Ticket.builder().currency(getCurrency(f.getTax())).amount(getAmount(f.getTax())).build());
+				
 			}
 		});
 		
 	    return first;
 	}
 	
-	private Business getBusiness(com.br.airlines.model.Availability.Flight flight) {
-		Business business = new Business();
+	private Fare getBusiness(com.br.airlines.model.Availability.Flight flight) {
+		Fare business = new Fare();
 		flight.getFares().getFare().forEach(f -> {
 			if(f.getClazz().equals(BUSINESSCLASS)){
 				business.setTicket(Ticket.builder().currency(getCurrency(f.getBasePrice())).amount(getAmount(f.getBasePrice())).build());
-				business.setTax(Tax.builder().currency(getCurrency(f.getTax())).amount(getAmount(f.getTax())).build());
-				business.setBookingFee(BookingFee.builder().currency(getCurrency(f.getFees())).amount(getAmount(f.getFees())).build());
+				business.setBookingFee(Ticket.builder().currency(getCurrency(f.getFees())).amount(getAmount(f.getFees())).build());
+				business.setTax(Ticket.builder().currency(getCurrency(f.getTax())).amount(getAmount(f.getTax())).build());
 			}
 		});
 		
 	    return business;
 	}
 	
-	private Economy getEconomy(com.br.airlines.model.Availability.Flight flight) {
-		Economy economy = new Economy();
+	private Fare getEconomy(com.br.airlines.model.Availability.Flight flight) {
+		Fare economy = new Fare();
 		flight.getFares().getFare().forEach(f -> {
 			if(f.getClazz().equals(ECONOMYCLASS)){
 				economy.setTicket(Ticket.builder().currency(getCurrency(f.getBasePrice())).amount(getAmount(f.getBasePrice())).build());
-				economy.setTax(Tax.builder().currency(getCurrency(f.getTax())).amount(getAmount(f.getTax())).build());
-				economy.setBookingFee(BookingFee.builder().currency(getCurrency(f.getFees())).amount(getAmount(f.getFees())).build());
+				economy.setBookingFee(Ticket.builder().currency(getCurrency(f.getFees())).amount(getAmount(f.getFees())).build());
+				economy.setTax(Ticket.builder().currency(getCurrency(f.getTax())).amount(getAmount(f.getTax())).build());
 			}
 		});
 		
