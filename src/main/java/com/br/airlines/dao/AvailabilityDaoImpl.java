@@ -22,31 +22,13 @@ public class AvailabilityDaoImpl implements  AvailabilityDao{
 			strBuilder.append("/flights/").append(origin).append("/").append(destination).append("/").append(start)
 			.append("/").append(end).append("/").append(pax);
 		    try
-		    {
-		    	/*HttpGet getRequest = new HttpGet(strBuilder.toString());
-		    	getRequest.addHeader("accept", "application/xml");
-		    	HttpResponse response = httpClient.execute(getRequest);
-		    	int statusCode = response.getStatusLine().getStatusCode();
-		        if (statusCode != 200) 
-		        {
-		            throw new RuntimeException("Failed with HTTP error code : " + statusCode);
-		        }*/
+		    {		    	
 		        availability = restTemplate.getForObject(strBuilder.toString(), Availability.class);
 		    } catch (Exception e) {				
 				LOG.error("Ocorreu uma exceção " + e);
 			} 
 		return availability;
 	}
-
-	/*public Availability extractAvailability(HttpResponse response)
-			throws IOException, JAXBException {
-		Availability availability;
-		HttpEntity httpEntity = response.getEntity();
-		String apiOutput = EntityUtils.toString(httpEntity);
-		JAXBContext jaxbContext = JAXBContext.newInstance(Availability.class);
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		availability = (Availability) jaxbUnmarshaller.unmarshal(new StringReader(apiOutput));
-		return availability;
-	}*/
+	
 
 }
